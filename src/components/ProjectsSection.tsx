@@ -1,56 +1,84 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, ArrowRight, ArrowLeft } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
+import { useQuery } from "@tanstack/react-query";
+
+interface Project {
+  _id: string;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  demoLink: string;
+  githubLink: string;
+}
+
+const fetchProjects = async (): Promise<Project[]> => {
+  const response = await fetch('/api/projects');
+  if (!response.ok) {
+    throw new Error('Failed to fetch projects');
+  }
+  return response.json();
+};
 
 const ProjectsSection = () => {
   const [currentProject, setCurrentProject] = useState(0);
+  
+  const { data: projects, isLoading, error } = useQuery({
+    queryKey: ['projects'],
+    queryFn: fetchProjects,
+    placeholderData: [
+      {
+        _id: "1",
+        title: "E-commerce Platform",
+        description: "A fully functional e-commerce website with shopping cart, checkout, and payment processing.",
+        image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80",
+        tags: ["React", "Node.js", "MongoDB", "Stripe"],
+        demoLink: "#",
+        githubLink: "#",
+      },
+      {
+        _id: "2",
+        title: "AI Chatbot Assistant",
+        description: "An intelligent chatbot that uses natural language processing to answer questions and provide assistance.",
+        image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+        tags: ["Python", "TensorFlow", "React", "Flask"],
+        demoLink: "#",
+        githubLink: "#",
+      },
+      {
+        _id: "3",
+        title: "Fitness Tracking App",
+        description: "A mobile-responsive app to track workouts, nutrition, and health metrics with data visualization.",
+        image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+        tags: ["React Native", "Firebase", "Redux", "D3.js"],
+        demoLink: "#",
+        githubLink: "#",
+      },
+      {
+        _id: "4",
+        title: "Social Media Dashboard",
+        description: "A comprehensive analytics dashboard for social media management and performance tracking.",
+        image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80",
+        tags: ["Vue.js", "Express", "PostgreSQL", "Chart.js"],
+        demoLink: "#",
+        githubLink: "#",
+      },
+    ]
+  });
 
-  const projects = [
-    {
-      title: "E-commerce Platform",
-      description: "A fully functional e-commerce website with shopping cart, checkout, and payment processing.",
-      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80",
-      tags: ["React", "Node.js", "MongoDB", "Stripe"],
-      demoLink: "#",
-      githubLink: "#",
-    },
-    {
-      title: "AI Chatbot Assistant",
-      description: "An intelligent chatbot that uses natural language processing to answer questions and provide assistance.",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      tags: ["Python", "TensorFlow", "React", "Flask"],
-      demoLink: "#",
-      githubLink: "#",
-    },
-    {
-      title: "Fitness Tracking App",
-      description: "A mobile-responsive app to track workouts, nutrition, and health metrics with data visualization.",
-      image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      tags: ["React Native", "Firebase", "Redux", "D3.js"],
-      demoLink: "#",
-      githubLink: "#",
-    },
-    {
-      title: "Social Media Dashboard",
-      description: "A comprehensive analytics dashboard for social media management and performance tracking.",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80",
-      tags: ["Vue.js", "Express", "PostgreSQL", "Chart.js"],
-      demoLink: "#",
-      githubLink: "#",
-    },
-  ];
+  const projectsList = projects || [];
 
   const nextProject = () => {
-    setCurrentProject((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
+    setCurrentProject((prev) => (prev === projectsList.length - 1 ? 0 : prev + 1));
   };
 
   const prevProject = () => {
-    setCurrentProject((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
+    setCurrentProject((prev) => (prev === 0 ? projectsList.length - 1 : prev - 1));
   };
 
   const container = {
@@ -67,6 +95,26 @@ const ProjectsSection = () => {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
   };
+
+  if (isLoading) {
+    return (
+      <section id="projects" className="section-padding bg-muted/30">
+        <div className="container">
+          <SectionHeader
+            title="My Projects"
+            subtitle="Loading projects..."
+          />
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    console.error('Error fetching projects:', error);
+  }
 
   return (
     <section id="projects" className="section-padding bg-muted/30">
@@ -85,50 +133,52 @@ const ProjectsSection = () => {
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
           >
-            {projects.map((project, index) => (
-              <motion.div key={index} variants={item}>
+            {projectsList.map((project) => (
+              <motion.div key={project._id} variants={item}>
                 <ProjectCard project={project} />
               </motion.div>
             ))}
           </motion.div>
 
           {/* Mobile View - Carousel */}
-          <div className="md:hidden">
-            <ProjectCard project={projects[currentProject]} />
-            
-            <div className="flex justify-center gap-4 mt-6">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={prevProject}
-                aria-label="Previous project"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
+          {projectsList.length > 0 && (
+            <div className="md:hidden">
+              <ProjectCard project={projectsList[currentProject]} />
               
-              <div className="flex items-center gap-2">
-                {projects.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`h-2 rounded-full transition-all ${
-                      currentProject === index ? "w-6 bg-purple" : "w-2 bg-muted-foreground/30"
-                    }`}
-                    onClick={() => setCurrentProject(index)}
-                    aria-label={`Go to project ${index + 1}`}
-                  />
-                ))}
+              <div className="flex justify-center gap-4 mt-6">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={prevProject}
+                  aria-label="Previous project"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                
+                <div className="flex items-center gap-2">
+                  {projectsList.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`h-2 rounded-full transition-all ${
+                        currentProject === index ? "w-6 bg-purple" : "w-2 bg-muted-foreground/30"
+                      }`}
+                      onClick={() => setCurrentProject(index)}
+                      aria-label={`Go to project ${index + 1}`}
+                    />
+                  ))}
+                </div>
+                
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={nextProject}
+                  aria-label="Next project"
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
               </div>
-              
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={nextProject}
-                aria-label="Next project"
-              >
-                <ArrowRight className="h-4 w-4" />
-              </Button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
@@ -136,14 +186,7 @@ const ProjectsSection = () => {
 };
 
 interface ProjectProps {
-  project: {
-    title: string;
-    description: string;
-    image: string;
-    tags: string[];
-    demoLink: string;
-    githubLink: string;
-  };
+  project: Project;
 }
 
 const ProjectCard = ({ project }: ProjectProps) => {
