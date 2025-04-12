@@ -1,7 +1,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowDown, GitHub, Linkedin, Twitter } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Twitter } from "lucide-react";
 
 const HeroSection = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -98,7 +98,7 @@ const HeroSection = () => {
             className="text-muted-foreground hover:text-purple transition-colors"
             aria-label="GitHub"
           >
-            <GitHub size={24} />
+            <Github size={24} />
           </a>
           <a 
             href="https://linkedin.com" 
