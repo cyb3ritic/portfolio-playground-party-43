@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -25,6 +26,20 @@ const Index = () => {
     }
     return false;
   });
+  
+  // Smooth scrolling effect with progress tracking for animations
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const currentProgress = window.scrollY / totalScroll;
+      setScrollProgress(currentProgress);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -44,6 +59,7 @@ const Index = () => {
     setLoading(false);
   };
 
+  // Enhanced page transition variants
   const pageVariants = {
     initial: {
       opacity: 0,
@@ -52,13 +68,29 @@ const Index = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
+        delayChildren: 0.3,
       },
+    },
+    exit: {
+      opacity: 0,
+    },
+  };
+
+  const sectionVariants = {
+    initial: { opacity: 0, y: 30 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.6, 0.05, 0.01, 0.9],
+      }
     },
   };
 
   return (
     <>
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {loading && <LoadingScreen onFinished={handleLoadingComplete} />}
       </AnimatePresence>
 
@@ -68,17 +100,41 @@ const Index = () => {
           <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
           <NavDots />
           
+          {/* Progress indicator */}
+          <motion.div
+            className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple via-blue to-neon-pink z-50"
+            style={{ scaleX: scrollProgress, transformOrigin: "0%" }}
+          />
+          
           <motion.main
             variants={pageVariants}
             initial="initial"
             animate="animate"
+            exit="exit"
           >
-            <HeroSection />
-            <AboutSection />
-            <ProjectsSection />
-            <SkillsSection />
-            <CertificationsSection />
-            <ContactSection />
+            <motion.div variants={sectionVariants}>
+              <HeroSection />
+            </motion.div>
+            
+            <motion.div variants={sectionVariants}>
+              <AboutSection />
+            </motion.div>
+            
+            <motion.div variants={sectionVariants}>
+              <ProjectsSection />
+            </motion.div>
+            
+            <motion.div variants={sectionVariants}>
+              <SkillsSection />
+            </motion.div>
+            
+            <motion.div variants={sectionVariants}>
+              <CertificationsSection />
+            </motion.div>
+            
+            <motion.div variants={sectionVariants}>
+              <ContactSection />
+            </motion.div>
           </motion.main>
           
           <Footer />
