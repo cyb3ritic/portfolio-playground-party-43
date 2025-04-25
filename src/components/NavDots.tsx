@@ -15,13 +15,18 @@ const NavDots = () => {
   ];
 
   useEffect(() => {
+    const observerOptions = {
+      threshold: 0.3, // Increased threshold for better detection
+      rootMargin: '-10% 0px -10% 0px' // Adjusted margins for better visibility
+    };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
         }
       });
-    }, { threshold: 0.5 });
+    }, observerOptions);
 
     sections.forEach(section => {
       const element = document.getElementById(section.id);
@@ -56,6 +61,7 @@ const NavDots = () => {
               whileHover={{ 
                 boxShadow: "0 0 12px rgba(139, 92, 246, 0.7)",
               }}
+              layoutId="activeDot"
             />
 
             <motion.span 

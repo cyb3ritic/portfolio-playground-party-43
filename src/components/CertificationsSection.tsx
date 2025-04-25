@@ -1,4 +1,3 @@
-
 import { motion, useAnimation, Variants } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +11,6 @@ const certifications = [
     title: "Machine Learning Specialization",
     provider: "Stanford University / Coursera",
     date: "2023",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad996?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
     link: "#",
     tags: ["Machine Learning", "Neural Networks", "AI"],
     icon: <Brain className="h-5 w-5" />,
@@ -68,7 +66,6 @@ const CertificationsSection = () => {
     },
   };
 
-  // Fix: Replace the getAnimationState check with a simple boolean flag
   if (isInView) {
     controls.start("show");
   }
@@ -93,43 +90,24 @@ const CertificationsSection = () => {
               key={index} 
               variants={itemVariants}
               whileHover={{ 
-                y: -10,
-                transition: { duration: 0.2 }
+                rotateY: 10,
+                scale: 1.05,
+                transition: { duration: 0.4, type: "spring" }
               }}
+              style={{ perspective: "1000px" }}
             >
-              <Card className="overflow-hidden group relative h-full">
-                {/* 3D Effect Overlay */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple/20 to-blue/20 backdrop-blur-sm rounded-lg transform-gpu rotate-3 scale-105"></div>
-                </div>
-
-                <div className="relative h-48 overflow-hidden">
-                  <motion.div 
-                    className="absolute inset-0 opacity-20"
-                    style={{ 
-                      background: `radial-gradient(circle at center, ${cert.color}, transparent 70%)`,
-                    }}
-                    animate={{
-                      scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      repeatType: "reverse",
+              <Card className="relative h-full overflow-hidden backdrop-blur-sm border-2 group hover:border-purple/50 transition-all duration-500">
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-br from-purple/10 via-blue/5 to-transparent"
+                    style={{
+                      transform: "translateZ(-10px)",
+                      backfaceVisibility: "hidden"
                     }}
                   />
-                  
-                  <motion.img
-                    src={cert.image}
-                    alt={cert.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    initial={{ scale: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
                 </div>
 
-                <CardHeader className="relative -mt-12">
+                <CardHeader className="relative">
                   <motion.div 
                     className="space-y-2"
                     initial={{ y: 20, opacity: 0 }}
@@ -137,12 +115,14 @@ const CertificationsSection = () => {
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span 
-                        className="p-1 rounded-full" 
+                      <motion.div
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.7 }}
+                        className="p-2 rounded-lg"
                         style={{ backgroundColor: cert.color }}
                       >
                         {cert.icon}
-                      </span>
+                      </motion.div>
                       <h3 className="text-xl font-bold line-clamp-2">{cert.title}</h3>
                     </div>
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
@@ -158,7 +138,7 @@ const CertificationsSection = () => {
                       <Badge 
                         key={idx} 
                         variant="outline" 
-                        className="bg-accent/50 group-hover:bg-accent/80 transition-colors"
+                        className="bg-accent/50 group-hover:bg-accent transition-colors"
                       >
                         {tag}
                       </Badge>
@@ -176,8 +156,7 @@ const CertificationsSection = () => {
                     <ExternalLink className="h-4 w-4" />
                   </motion.a>
                 </CardContent>
-                
-                {/* Decorative accent */}
+
                 <div className="absolute top-2 right-2">
                   <motion.div 
                     className="bg-accent/50 p-1.5 rounded-full"
@@ -187,6 +166,22 @@ const CertificationsSection = () => {
                     <Award className="h-4 w-4 text-purple" />
                   </motion.div>
                 </div>
+
+                <motion.div
+                  className="absolute -bottom-4 -right-4 w-32 h-32 opacity-10"
+                  animate={{
+                    rotate: [0, 360],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                  style={{
+                    background: `radial-gradient(circle at center, ${cert.color}, transparent)`,
+                  }}
+                />
               </Card>
             </motion.div>
           ))}
