@@ -68,7 +68,8 @@ const CertificationsSection = () => {
     },
   };
 
-  if (isInView && !controls.getAnimationState().isAnimating) {
+  // Fix: Replace the getAnimationState check with a simple boolean flag
+  if (isInView) {
     controls.start("show");
   }
 

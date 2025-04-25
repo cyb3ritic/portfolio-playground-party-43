@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { motion, useInView, useAnimation, Variants } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Brain, Database, Code, Lightbulb, ChartPie, BarChart, TrendingUp, Function } from "lucide-react";
+import { Brain, Database, Code, Lightbulb, ChartPie, BarChart, TrendingUp, Activity } from "lucide-react";
 
 const SkillsSection = () => {
   const controls = useAnimation();
@@ -27,7 +27,7 @@ const SkillsSection = () => {
       { name: "Matplotlib", level: 88, color: "#11557C", icon: <ChartPie className="h-5 w-5" />, desc: "Creating static, interactive, and animated visualizations" },
       { name: "Tableau", level: 82, color: "#E97627", icon: <BarChart className="h-5 w-5" />, desc: "Business intelligence and data visualization" },
       { name: "Power BI", level: 85, color: "#F2C811", icon: <BarChart className="h-5 w-5" />, desc: "Interactive data visualization dashboards" },
-      { name: "Statistical Analysis", level: 90, color: "#20C997", icon: <Function className="h-5 w-5" />, desc: "Hypothesis testing and statistical modeling" },
+      { name: "Statistical Analysis", level: 90, color: "#20C997", icon: <Activity className="h-5 w-5" />, desc: "Hypothesis testing and statistical modeling" },
     ],
   };
 
