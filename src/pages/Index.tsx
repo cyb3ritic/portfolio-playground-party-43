@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -6,17 +5,17 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import SkillsSection from "@/components/SkillsSection";
-import BlogSection from "@/components/BlogSection";
+import CertificationsSection from "@/components/CertificationsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import ParticleBackground from "@/components/ParticleBackground";
 import EasterEgg from "@/components/EasterEgg";
 import LoadingScreen from "@/components/LoadingScreen";
+import NavDots from "@/components/NavDots";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check for stored preference or system preference
     if (typeof window !== "undefined") {
       const savedMode = localStorage.getItem("theme");
       if (savedMode) {
@@ -28,14 +27,12 @@ const Index = () => {
   });
 
   useEffect(() => {
-    // Apply dark mode class to document
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
     
-    // Save preference
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
@@ -47,7 +44,6 @@ const Index = () => {
     setLoading(false);
   };
 
-  // Framer Motion variants for page sections
   const pageVariants = {
     initial: {
       opacity: 0,
@@ -70,6 +66,7 @@ const Index = () => {
         <>
           <ParticleBackground isDarkMode={isDarkMode} />
           <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
+          <NavDots />
           
           <motion.main
             variants={pageVariants}
@@ -80,7 +77,7 @@ const Index = () => {
             <AboutSection />
             <ProjectsSection />
             <SkillsSection />
-            <BlogSection />
+            <CertificationsSection />
             <ContactSection />
           </motion.main>
           
