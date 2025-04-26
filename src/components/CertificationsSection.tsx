@@ -1,7 +1,9 @@
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { SectionHeader } from "./SectionHeader";
 import CertificationCard from "./CertificationCard";
+import CertificationScene from "./3d/CertificationScene";
 import { containerVariants } from "@/animations/certificationAnimations";
 import { Certification } from "@/types/certification";
 
@@ -33,14 +35,32 @@ const certifications: Certification[] = [
 ];
 
 const CertificationsSection = () => {
+  useEffect(() => {
+    const initScrollEffects = async () => {
+      const { animateSections } = await import("@/animations/certificationAnimations");
+      animateSections();
+    };
+    initScrollEffects();
+  }, []);
+
   return (
-    <section id="certifications" className="section-padding">
+    <section id="certifications" className="section-padding relative overflow-hidden">
+      {/* Background gradient blobs */}
+      <div className="absolute -z-10 top-0 right-0 w-96 h-96 bg-purple/10 rounded-full blur-[120px]" />
+      <div className="absolute -z-10 bottom-0 left-0 w-96 h-96 bg-blue/10 rounded-full blur-[120px]" />
+      
       <div className="container">
         <SectionHeader
           title="Certifications"
           subtitle="Professional achievements and credentials"
         />
         
+        {/* 3D Certification Scene - shows on larger screens */}
+        <div className="hidden md:block mb-12">
+          <CertificationScene certifications={certifications} />
+        </div>
+        
+        {/* Traditional cards for mobile */}
         <motion.div
           variants={containerVariants}
           initial="hidden"

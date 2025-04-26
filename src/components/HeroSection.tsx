@@ -1,8 +1,8 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Twitter } from "lucide-react";
 import { motion } from "framer-motion";
+import HeroScene from './3d/HeroScene';
 
 const HeroSection = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -13,6 +13,23 @@ const HeroSection = () => {
   const deletingSpeed = 50;
   const delayBetweenWords = 1500;
   const animationRef = useRef<NodeJS.Timeout | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    setIsDarkMode(document.documentElement.classList.contains('dark'));
+    
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDarkMode(document.documentElement.classList.contains('dark'));
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, { attributes: true });
+    
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     // Typing animation
@@ -60,33 +77,9 @@ const HeroSection = () => {
       id="hero" 
       className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden"
     >
-      {/* Animated data nodes background */}
-      <div className="absolute inset-0 pointer-events-none">
-        {floatingNodes.map((node) => (
-          <motion.div
-            key={node.id}
-            className="absolute rounded-full bg-purple opacity-30"
-            style={{
-              left: `${node.x}%`,
-              top: `${node.y}%`,
-              width: `${node.size}px`,
-              height: `${node.size}px`,
-            }}
-            animate={{
-              x: [20, -20, 20],
-              y: [20, -20, 20],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: node.duration,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
-
+      {/* 3D Hero Scene */}
+      <HeroScene isDarkMode={isDarkMode} />
+      
       <div className="container flex flex-col items-center text-center space-y-8 z-10">
         <motion.div 
           className="space-y-4"
@@ -94,9 +87,15 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold">
+          <motion.h1 
+            className="text-3xl sm:text-4xl md:text-6xl font-bold"
+            animate={{ 
+              textShadow: ["0 0 0px rgba(139,92,246,0)", "0 0 10px rgba(139,92,246,0.5)", "0 0 0px rgba(139,92,246,0)"]
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
             Hello, I'm <span className="gradient-text">Alex Chen</span>
-          </h1>
+          </motion.h1>
           
           <div className="h-12 md:h-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium">
@@ -127,12 +126,23 @@ const HeroSection = () => {
         >
           <Button 
             size="lg" 
-            className="gap-2 bg-purple hover:bg-purple-dark group relative overflow-hidden"
+            className="group relative overflow-hidden"
             asChild
           >
             <a href="#projects">
+              <motion.span 
+                className="absolute inset-0 bg-gradient-to-r from-purple to-blue opacity-80"
+                animate={{ 
+                  x: ["0%", "100%", "0%"],
+                  opacity: [0.6, 0.8, 0.6]
+                }}
+                transition={{ 
+                  duration: 5, 
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+              />
               <span className="relative z-10">View My Projects</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-purple to-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             </a>
           </Button>
           <Button 
@@ -142,8 +152,12 @@ const HeroSection = () => {
             asChild
           >
             <a href="#contact">
+              <motion.span 
+                className="absolute inset-0 bg-gradient-to-r from-purple/20 to-blue/20 opacity-0 group-hover:opacity-100"
+                animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+              />
               <span className="relative z-10">Get In Touch</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-purple/20 to-blue/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             </a>
           </Button>
         </motion.div>
@@ -183,7 +197,18 @@ const HeroSection = () => {
           </a>
         </motion.div>
 
-        <div className="absolute bottom-10 w-full flex justify-center animate-bounce">
+        <motion.div 
+          className="absolute bottom-10 w-full flex justify-center"
+          animate={{ 
+            y: [0, 8, 0],
+          }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut"
+          }}
+        >
           <a 
             href="#about" 
             aria-label="Scroll to About section"
@@ -191,7 +216,7 @@ const HeroSection = () => {
           >
             <ArrowDown size={28} />
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
