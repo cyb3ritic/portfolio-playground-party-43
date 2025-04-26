@@ -1,15 +1,15 @@
 
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars, Environment, useProgress } from '@react-three/drei';
+import { OrbitControls, Stars, Environment, useProgress, Html } from '@react-three/drei';
 import HeroModel from './HeroModel';
 
 function Loader() {
   const { progress } = useProgress();
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
+    <Html center>
       <div className="text-lg font-bold text-purple">{progress.toFixed(0)}%</div>
-    </div>
+    </Html>
   );
 }
 
