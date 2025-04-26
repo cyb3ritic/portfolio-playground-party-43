@@ -19,7 +19,6 @@ const CertificateModel = ({
   const mesh = useRef<Mesh>(null);
   const isActive = active === index;
   
-  // Use direct state instead of springs to avoid compatibility issues
   useFrame((state) => {
     if (!mesh.current) return;
     
@@ -30,14 +29,15 @@ const CertificateModel = ({
     const targetRotY = isActive ? 0 : -0.3;
     const targetScale = isActive ? 1.2 : 1;
     
-    // Smooth interpolation
-    mesh.current.position.x += (targetX - mesh.current.position.x) * 0.1;
-    mesh.current.position.y += (targetY - mesh.current.position.y) * 0.1;
-    mesh.current.position.z += (targetZ - mesh.current.position.z) * 0.1;
-    mesh.current.rotation.y += (targetRotY - mesh.current.rotation.y) * 0.1;
-    mesh.current.scale.x += (targetScale - mesh.current.scale.x) * 0.1;
-    mesh.current.scale.y += (targetScale - mesh.current.scale.y) * 0.1;
-    mesh.current.scale.z += (targetScale - mesh.current.scale.z) * 0.1;
+    // Enhanced smooth interpolation with improved easing
+    const smoothFactor = 0.05; // Lower value = smoother transition
+    mesh.current.position.x += (targetX - mesh.current.position.x) * smoothFactor;
+    mesh.current.position.y += (targetY - mesh.current.position.y) * smoothFactor;
+    mesh.current.position.z += (targetZ - mesh.current.position.z) * smoothFactor;
+    mesh.current.rotation.y += (targetRotY - mesh.current.rotation.y) * smoothFactor;
+    mesh.current.scale.x += (targetScale - mesh.current.scale.x) * smoothFactor;
+    mesh.current.scale.y += (targetScale - mesh.current.scale.y) * smoothFactor;
+    mesh.current.scale.z += (targetScale - mesh.current.scale.z) * smoothFactor;
   });
 
   return (
@@ -112,8 +112,9 @@ export default function CertificationScene({ certifications }: { certifications:
           rotation={[0, 0, 0]}
           polar={[-Math.PI / 4, Math.PI / 4]}
           azimuth={[-Math.PI / 4, Math.PI / 4]}
+          config={{ mass: 1, tension: 170, friction: 26 }} // Smoother controls
         >
-          <Float rotationIntensity={0.2} floatIntensity={0.5}>
+          <Float rotationIntensity={0.2} floatIntensity={0.5} speed={2}>
             <group>
               {certifications.map((cert, index) => (
                 <CertificateModel 

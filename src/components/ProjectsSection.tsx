@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,12 +19,59 @@ interface Project {
 }
 
 const fetchProjects = async (): Promise<Project[]> => {
-  const response = await fetch('/api/projects');
-  if (!response.ok) {
-    throw new Error('Failed to fetch projects');
+  try {
+    const response = await fetch('/api/projects');
+    if (!response.ok) {
+      console.error('Failed to fetch projects, using fallback data');
+      throw new Error('Failed to fetch projects');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error in fetchProjects:', error);
+    // Return fallback data when fetch fails
+    return FALLBACK_PROJECTS;
   }
-  return response.json();
 };
+
+// Fallback projects data
+const FALLBACK_PROJECTS: Project[] = [
+  {
+    _id: "1",
+    title: "E-commerce Platform",
+    description: "A fully functional e-commerce website with shopping cart, checkout, and payment processing.",
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80",
+    tags: ["React", "Node.js", "MongoDB", "Stripe"],
+    demoLink: "#",
+    githubLink: "#",
+  },
+  {
+    _id: "2",
+    title: "AI Chatbot Assistant",
+    description: "An intelligent chatbot that uses natural language processing to answer questions and provide assistance.",
+    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    tags: ["Python", "TensorFlow", "React", "Flask"],
+    demoLink: "#",
+    githubLink: "#",
+  },
+  {
+    _id: "3",
+    title: "Fitness Tracking App",
+    description: "A mobile-responsive app to track workouts, nutrition, and health metrics with data visualization.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    tags: ["React Native", "Firebase", "Redux", "D3.js"],
+    demoLink: "#",
+    githubLink: "#",
+  },
+  {
+    _id: "4",
+    title: "Social Media Dashboard",
+    description: "A comprehensive analytics dashboard for social media management and performance tracking.",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80",
+    tags: ["Vue.js", "Express", "PostgreSQL", "Chart.js"],
+    demoLink: "#",
+    githubLink: "#",
+  },
+];
 
 const ProjectsSection = () => {
   const [currentProject, setCurrentProject] = useState(0);
@@ -31,47 +79,14 @@ const ProjectsSection = () => {
   const { data: projects, isLoading, error } = useQuery({
     queryKey: ['projects'],
     queryFn: fetchProjects,
-    placeholderData: [
-      {
-        _id: "1",
-        title: "E-commerce Platform",
-        description: "A fully functional e-commerce website with shopping cart, checkout, and payment processing.",
-        image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80",
-        tags: ["React", "Node.js", "MongoDB", "Stripe"],
-        demoLink: "#",
-        githubLink: "#",
-      },
-      {
-        _id: "2",
-        title: "AI Chatbot Assistant",
-        description: "An intelligent chatbot that uses natural language processing to answer questions and provide assistance.",
-        image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        tags: ["Python", "TensorFlow", "React", "Flask"],
-        demoLink: "#",
-        githubLink: "#",
-      },
-      {
-        _id: "3",
-        title: "Fitness Tracking App",
-        description: "A mobile-responsive app to track workouts, nutrition, and health metrics with data visualization.",
-        image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        tags: ["React Native", "Firebase", "Redux", "D3.js"],
-        demoLink: "#",
-        githubLink: "#",
-      },
-      {
-        _id: "4",
-        title: "Social Media Dashboard",
-        description: "A comprehensive analytics dashboard for social media management and performance tracking.",
-        image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80",
-        tags: ["Vue.js", "Express", "PostgreSQL", "Chart.js"],
-        demoLink: "#",
-        githubLink: "#",
-      },
-    ]
+    placeholderData: FALLBACK_PROJECTS,
+    staleTime: 60000, // 1 minute
+    refetchOnWindowFocus: false
   });
 
-  const projectsList = projects || [];
+  const projectsList = projects || FALLBACK_PROJECTS;
+
+  console.log("Projects data:", projectsList);
 
   const nextProject = () => {
     setCurrentProject((prev) => (prev === projectsList.length - 1 ? 0 : prev + 1));
@@ -93,7 +108,7 @@ const ProjectsSection = () => {
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
   if (isLoading) {
@@ -133,15 +148,21 @@ const ProjectsSection = () => {
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
           >
-            {projectsList.map((project) => (
-              <motion.div key={project._id} variants={item}>
-                <ProjectCard project={project} />
-              </motion.div>
-            ))}
+            {Array.isArray(projectsList) && projectsList.length > 0 ? (
+              projectsList.map((project) => (
+                <motion.div key={project._id} variants={item}>
+                  <ProjectCard project={project} />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-10">
+                <p>No projects found. Please check your API connection.</p>
+              </div>
+            )}
           </motion.div>
 
           {/* Mobile View - Carousel */}
-          {projectsList.length > 0 && (
+          {Array.isArray(projectsList) && projectsList.length > 0 && (
             <div className="md:hidden">
               <ProjectCard project={projectsList[currentProject]} />
               
@@ -151,6 +172,7 @@ const ProjectsSection = () => {
                   size="icon"
                   onClick={prevProject}
                   aria-label="Previous project"
+                  className="transition-transform hover:scale-105"
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
@@ -173,6 +195,7 @@ const ProjectsSection = () => {
                   size="icon"
                   onClick={nextProject}
                   aria-label="Next project"
+                  className="transition-transform hover:scale-105"
                 >
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -191,12 +214,12 @@ interface ProjectProps {
 
 const ProjectCard = ({ project }: ProjectProps) => {
   return (
-    <Card className="overflow-hidden card-hover">
+    <Card className="overflow-hidden card-hover transform transition-all duration-300 hover:-translate-y-2">
       <div className="relative h-48 overflow-hidden">
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
@@ -212,7 +235,7 @@ const ProjectCard = ({ project }: ProjectProps) => {
         
         <div className="flex flex-wrap gap-2">
           {project.tags.map((tag, idx) => (
-            <Badge key={idx} variant="outline" className="bg-accent/50">
+            <Badge key={idx} variant="outline" className="bg-accent/50 transition-all hover:bg-accent/70">
               {tag}
             </Badge>
           ))}
@@ -223,7 +246,7 @@ const ProjectCard = ({ project }: ProjectProps) => {
         <Button 
           variant="default" 
           size="sm"
-          className="w-full bg-purple hover:bg-purple-dark"
+          className="w-full bg-purple hover:bg-purple-dark transition-all duration-300"
           asChild
         >
           <a 
@@ -239,7 +262,7 @@ const ProjectCard = ({ project }: ProjectProps) => {
         <Button 
           variant="outline" 
           size="sm"
-          className="w-full"
+          className="w-full transition-all duration-300 hover:bg-accent/20"
           asChild
         >
           <a 

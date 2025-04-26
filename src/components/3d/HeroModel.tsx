@@ -11,32 +11,41 @@ export default function HeroModel({ isDarkMode }: { isDarkMode: boolean }) {
   // Create a floating sphere with particles around it
   useFrame((state) => {
     if (!mesh.current) return;
-    mesh.current.rotation.y = state.clock.getElapsedTime() * 0.15;
+    // Smoother rotation
+    mesh.current.rotation.y = state.clock.getElapsedTime() * 0.1;
   });
 
   useEffect(() => {
     if (!mesh.current) return;
     
-    // Animate on initial load
+    // Improved initial animation
     gsap.fromTo(
       mesh.current.position,
       { y: -10 },
-      { y: 0, duration: 2, ease: 'power3.out' }
+      { y: 0, duration: 2.5, ease: 'power3.out' }
     );
     
-    // Animate on dark/light mode change
+    // Enhanced animation on dark/light mode change
     gsap.to(mesh.current.rotation, {
       z: mesh.current.rotation.z + Math.PI / 4,
-      duration: 1,
+      duration: 1.5,
       ease: 'power2.inOut'
     });
+    
+    // Subtle scale animation on theme change
+    gsap.fromTo(
+      mesh.current.scale,
+      { x: 0.95, y: 0.95, z: 0.95 },
+      { x: 1, y: 1, z: 1, duration: 1.8, ease: 'elastic.out(1, 0.4)' }
+    );
   }, [isDarkMode]);
 
   return (
     <Float
-      speed={2}
+      speed={1.5}
       rotationIntensity={0.2}
-      floatIntensity={0.5}
+      floatIntensity={0.4}
+      floatingRange={[-0.1, 0.1]}
     >
       <group ref={mesh}>
         {/* Center sphere */}

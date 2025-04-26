@@ -8,7 +8,9 @@ function Loader() {
   const { progress } = useProgress();
   return (
     <Html center>
-      <div className="text-lg font-bold text-purple">{progress.toFixed(0)}%</div>
+      <div className="text-lg font-bold text-gradient-primary">
+        <div className="animate-pulse-glow">{progress.toFixed(0)}%</div>
+      </div>
     </Html>
   );
 }
@@ -18,8 +20,10 @@ export default function HeroScene({ isDarkMode }: { isDarkMode: boolean }) {
     <div className="absolute inset-0 -z-10">
       <Canvas 
         camera={{ position: [0, 0, 8], fov: 45 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         dpr={[1, 2]}
+        shadows
+        performance={{ min: 0.5 }}
       >
         <Suspense fallback={<Loader />}>
           <ambientLight intensity={0.5} />
@@ -27,6 +31,7 @@ export default function HeroScene({ isDarkMode }: { isDarkMode: boolean }) {
             position={[10, 10, 10]} 
             intensity={1.5} 
             color={isDarkMode ? '#ffffff' : '#ffffff'} 
+            castShadow
           />
           <HeroModel isDarkMode={isDarkMode} />
           <Stars 
@@ -36,7 +41,7 @@ export default function HeroScene({ isDarkMode }: { isDarkMode: boolean }) {
             factor={4}
             saturation={0}
             fade
-            speed={1}
+            speed={0.5}
           />
           <Environment preset="city" />
           <OrbitControls 
@@ -44,9 +49,10 @@ export default function HeroScene({ isDarkMode }: { isDarkMode: boolean }) {
             enablePan={false}
             enableRotate={true}
             autoRotate
-            autoRotateSpeed={0.5}
+            autoRotateSpeed={0.3}
             maxPolarAngle={Math.PI / 2}
             minPolarAngle={Math.PI / 3}
+            rotateSpeed={0.5}
           />
         </Suspense>
       </Canvas>
