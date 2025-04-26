@@ -15,7 +15,7 @@ export const certifications: Certification[] = [
   {
     title: "Big Data Engineering",
     provider: "IBM",
-    date: "2024", 
+    date: "2024",
     link: "#",
     tags: ["Hadoop", "Spark", "NoSQL"],
     icon: <Database className="h-5 w-5" />,
@@ -25,7 +25,7 @@ export const certifications: Certification[] = [
     title: "Advanced Data Science",
     provider: "MIT",
     date: "2024",
-    link: "#", 
+    link: "#",
     tags: ["Statistics", "ML", "Python"],
     icon: <ChartPie className="h-5 w-5" />,
     color: "#D946EF"
