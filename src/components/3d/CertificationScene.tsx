@@ -1,7 +1,6 @@
 
 import { useState, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useSpring, animated } from '@react-spring/three';
 import { Text, PresentationControls, Float } from '@react-three/drei';
 import { Mesh } from 'three';
 import { Certification } from '@/types/certification';
@@ -20,36 +19,31 @@ const CertificateModel = ({
   const mesh = useRef<Mesh>(null);
   const isActive = active === index;
   
-  const { position, rotation, scale } = useSpring({
-    position: isActive 
-      ? [0, 0, 2] as [number, number, number]
-      : [(index - 1) * 3, 0, 0] as [number, number, number],
-    rotation: isActive 
-      ? [0, 0, 0] as [number, number, number]
-      : [0, -0.3, 0] as [number, number, number],
-    scale: isActive ? 1.2 : 1,
-    config: { mass: 1, tension: 280, friction: 60 }
-  });
-
+  // Use direct state instead of springs to avoid compatibility issues
   useFrame((state) => {
     if (!mesh.current) return;
-    // Add subtle floating movement when not active
-    if (!isActive) {
-      mesh.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.5 + index) * 0.1;
-    }
+    
+    // Target positions and rotations
+    const targetX = isActive ? 0 : (index - 1) * 3;
+    const targetY = isActive ? 0 : Math.sin(state.clock.getElapsedTime() * 0.5 + index) * 0.1;
+    const targetZ = isActive ? 2 : 0;
+    const targetRotY = isActive ? 0 : -0.3;
+    const targetScale = isActive ? 1.2 : 1;
+    
+    // Smooth interpolation
+    mesh.current.position.x += (targetX - mesh.current.position.x) * 0.1;
+    mesh.current.position.y += (targetY - mesh.current.position.y) * 0.1;
+    mesh.current.position.z += (targetZ - mesh.current.position.z) * 0.1;
+    mesh.current.rotation.y += (targetRotY - mesh.current.rotation.y) * 0.1;
+    mesh.current.scale.x += (targetScale - mesh.current.scale.x) * 0.1;
+    mesh.current.scale.y += (targetScale - mesh.current.scale.y) * 0.1;
+    mesh.current.scale.z += (targetScale - mesh.current.scale.z) * 0.1;
   });
 
   return (
-    <animated.mesh
+    <mesh
       ref={mesh}
-      // Use primitive values instead of trying to transform with .to()
-      position-x={position[0]}
-      position-y={position[1]}
-      position-z={position[2]}
-      rotation-x={rotation[0]}
-      rotation-y={rotation[1]}
-      rotation-z={rotation[2]}
-      scale={scale}
+      position={[index * 3, 0, 0]}
       onClick={() => setActive(index)}
     >
       <planeGeometry args={[2.5, 1.5, 1]} />
@@ -99,7 +93,7 @@ const CertificateModel = ({
       >
         {isActive ? certification.description : "Click to view details"}
       </Text>
-    </animated.mesh>
+    </mesh>
   );
 };
 

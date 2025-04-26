@@ -56,8 +56,8 @@ export default function HeroModel({ isDarkMode }: { isDarkMode: boolean }) {
           <sphereGeometry args={[1.5, 16, 16]} />
           <meshStandardMaterial 
             color={isDarkMode ? "#33C3F0" : "#1EAEDB"}
-            wireframe
-            transparent
+            wireframe={true}
+            transparent={true}
             opacity={0.3}
           />
         </mesh>
@@ -67,7 +67,7 @@ export default function HeroModel({ isDarkMode }: { isDarkMode: boolean }) {
           <torusGeometry args={[2.2, 0.1, 16, 100]} />
           <meshStandardMaterial 
             color={isDarkMode ? "#D946EF" : "#F97316"}
-            transparent
+            transparent={true}
             opacity={0.6}
           />
         </mesh>
@@ -75,7 +75,7 @@ export default function HeroModel({ isDarkMode }: { isDarkMode: boolean }) {
           <torusGeometry args={[2.4, 0.05, 16, 100]} />
           <meshStandardMaterial
             color={isDarkMode ? "#F97316" : "#D946EF"}
-            transparent
+            transparent={true}
             opacity={0.4}
           />
         </mesh>
