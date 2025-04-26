@@ -42,9 +42,13 @@ const CertificateModel = ({
   return (
     <animated.mesh
       ref={mesh}
-      // Spread the spring values properly to avoid type errors
-      position={position.to((x, y, z) => [x, y, z])}
-      rotation={rotation.to((x, y, z) => [x, y, z])}
+      // Use primitive values instead of trying to transform with .to()
+      position-x={position[0]}
+      position-y={position[1]}
+      position-z={position[2]}
+      rotation-x={rotation[0]}
+      rotation-y={rotation[1]}
+      rotation-z={rotation[2]}
       scale={scale}
       onClick={() => setActive(index)}
     >
