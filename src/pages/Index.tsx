@@ -82,6 +82,7 @@ const Index = () => {
   };
 
   const handleLoadingComplete = () => {
+    console.log("Loading complete, showing main content");
     setLoading(false);
   };
 
@@ -139,6 +140,8 @@ const Index = () => {
       clearInterval(interval);
     };
   }, [mousePosition]);
+
+  console.log("Rendering Index component, loading state:", loading);
 
   return (
     <>

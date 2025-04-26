@@ -42,7 +42,7 @@ const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
       });
     }, 500);
 
-    // Clear intervals when done
+    // Clear intervals when component unmounts
     return () => {
       clearInterval(textInterval);
       clearInterval(quoteInterval);
@@ -62,53 +62,52 @@ const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
   }, [progress, onFinished]);
 
   return (
-    <AnimatePresence>
+    <motion.div
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-background flex flex-col items-center justify-center z-50"
+    >
       <motion.div
-        initial={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-background flex flex-col items-center justify-center z-50"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", duration: 0.8 }}
+        className="text-center space-y-6"
       >
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", duration: 0.8 }}
-          className="text-center space-y-6"
-        >
-          <div className="text-4xl font-bold font-display flex items-center justify-center gap-2">
-            <span className="text-4xl text-purple">{"<"}</span>
-            <span className="gradient-text">Portfolio</span>
-            <span className="text-4xl text-neon-pink">{"/>"}</span>
-          </div>
+        <div className="text-4xl font-bold font-display flex items-center justify-center gap-2">
+          <span className="text-4xl text-purple">{"<"}</span>
+          <span className="gradient-text">Portfolio</span>
+          <span className="text-4xl text-neon-pink">{"/>"}</span>
+        </div>
 
-          <div className="flex items-center justify-center gap-3 text-lg">
-            <Loader2 className="h-6 w-6 animate-spin text-purple" />
-            <span>{loadingText}</span>
-          </div>
+        <div className="flex items-center justify-center gap-3 text-lg">
+          <Loader2 className="h-6 w-6 animate-spin text-purple" />
+          <span>{loadingText}</span>
+        </div>
 
-          <div className="w-64 h-2 bg-muted rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              className="h-full bg-gradient-to-r from-purple to-neon-pink"
-            />
-          </div>
+        <div className="w-64 h-2 bg-muted rounded-full overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            className="h-full bg-gradient-to-r from-purple to-neon-pink"
+          />
+        </div>
 
-          <div className="h-16 flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={currentQuote}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="text-sm text-muted-foreground italic"
-              >
-                {loadingQuotes[currentQuote]}
-              </motion.p>
-            </AnimatePresence>
-          </div>
-        </motion.div>
+        <div className="h-16 flex items-center justify-center">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={currentQuote}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="text-sm text-muted-foreground italic"
+            >
+              {loadingQuotes[currentQuote]}
+            </motion.p>
+          </AnimatePresence>
+        </div>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 };
 
