@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -6,7 +5,7 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import SkillsSection from "@/components/SkillsSection";
-import CertificationsSection from "@/components/CertificationsSection";
+import BlogSection from "@/components/BlogSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -27,7 +26,6 @@ const Index = () => {
     return false;
   });
   
-  // Smooth scrolling effect with progress tracking for animations
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -59,7 +57,6 @@ const Index = () => {
     setLoading(false);
   };
 
-  // Enhanced page transition variants
   const pageVariants = {
     initial: {
       opacity: 0,
@@ -100,7 +97,6 @@ const Index = () => {
           <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
           <NavDots />
           
-          {/* Progress indicator */}
           <motion.div
             className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple via-blue to-neon-pink z-50"
             style={{ scaleX: scrollProgress, transformOrigin: "0%" }}
@@ -129,7 +125,7 @@ const Index = () => {
             </motion.div>
             
             <motion.div variants={sectionVariants}>
-              <CertificationsSection />
+              <BlogSection />
             </motion.div>
             
             <motion.div variants={sectionVariants}>
