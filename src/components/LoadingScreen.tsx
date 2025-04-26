@@ -11,6 +11,7 @@ const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
   const [progress, setProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("Loading");
   const [currentQuote, setCurrentQuote] = useState(0);
+  const [completed, setCompleted] = useState(false);
 
   const loadingQuotes = [
     "Brewing creative code...",
@@ -52,14 +53,17 @@ const LoadingScreen = ({ onFinished }: LoadingScreenProps) => {
 
   useEffect(() => {
     // When progress reaches 100%, wait a bit then finish
-    if (progress === 100) {
+    if (progress === 100 && !completed) {
+      console.info("LoadingScreen progress reached 100%, triggering completion");
+      setCompleted(true);
       const timer = setTimeout(() => {
+        console.info("LoadingScreen calling onFinished callback");
         onFinished();
       }, 1000);
       
       return () => clearTimeout(timer);
     }
-  }, [progress, onFinished]);
+  }, [progress, onFinished, completed]);
 
   return (
     <motion.div

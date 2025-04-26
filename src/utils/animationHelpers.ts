@@ -10,8 +10,15 @@ export const initScrollAnimations = () => {
   // This function would normally contain GSAP or other animation setup code
   // Since we don't have explicit animation setup yet, this is just a placeholder
   
-  // Example of what this might do:
-  // - Set up scroll triggers for elements
-  // - Initialize page transition animations
-  // - Set up parallax effects
+  document.dispatchEvent(new CustomEvent('animationsReady'));
 };
+
+/**
+ * Reset any animation states or configurations
+ */
+export const resetAnimations = () => {
+  console.info("Resetting animations");
+  
+  // Placeholder for animation reset code
+};
+

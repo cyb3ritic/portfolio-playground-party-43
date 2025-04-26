@@ -14,6 +14,7 @@ import ParticleBackground from "@/components/ParticleBackground";
 import EasterEgg from "@/components/EasterEgg";
 import LoadingScreen from "@/components/LoadingScreen";
 import NavDots from "@/components/NavDots";
+import { initScrollAnimations } from "@/utils/animationHelpers";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ const Index = () => {
   const setupAnimations = useCallback(() => {
     // This would contain any animation setup code
     console.info("Setting up animations");
+    initScrollAnimations();
   }, []);
 
   useEffect(() => {
@@ -64,22 +66,30 @@ const Index = () => {
     document.documentElement.classList.toggle("dark", isDarkMode);
     
     // Log for debugging
-    console.info("Rendering Index component, loading state:", loading);
+    console.info("Theme set, isDarkMode:", isDarkMode);
+  }, [isDarkMode]);
+  
+  // Separate effect for loading animation
+  useEffect(() => {
+    console.info("Loading animation effect triggered, current loading state:", loading);
     
-    // Simulate loading time
     const timer = setTimeout(() => {
+      console.info("Loading timeout completed, setting loading to false");
       setLoading(false);
       setupAnimations();
     }, 3000);
     
     return () => clearTimeout(timer);
-  }, [isDarkMode, setupAnimations]);
+  }, []); // Removed loading dependency to prevent potential loop
 
   return (
     <>
       <AnimatePresence mode="wait">
         {loading ? (
-          <LoadingScreen onFinished={() => setLoading(false)} />
+          <LoadingScreen onFinished={() => {
+            console.info("LoadingScreen onFinished callback triggered");
+            setLoading(false);
+          }} />
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
