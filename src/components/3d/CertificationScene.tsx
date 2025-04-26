@@ -1,8 +1,9 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
 import { Text, PresentationControls, Float } from '@react-three/drei';
+import { Mesh } from 'three';
 import { Certification } from '@/types/certification';
 
 const CertificateModel = ({ 
@@ -16,7 +17,7 @@ const CertificateModel = ({
   active: number;
   setActive: (index: number) => void;
 }) => {
-  const mesh = useRef<THREE.Mesh>(null);
+  const mesh = useRef<Mesh>(null);
   const isActive = active === index;
   
   const { position, rotation, scale } = useSpring({
@@ -48,14 +49,14 @@ const CertificateModel = ({
     >
       <planeGeometry args={[2.5, 1.5, 1]} />
       <meshStandardMaterial 
-        color="#8B5CF6"
+        color={"#8B5CF6"}
         metalness={0.5}
         roughness={0.4}
       />
       <Text
         position={[0, 0.4, 0.1]}
         fontSize={0.15}
-        color="#ffffff"
+        color={"#ffffff"}
         anchorX="center"
         anchorY="middle"
         maxWidth={2}
@@ -66,7 +67,7 @@ const CertificateModel = ({
       <Text
         position={[0, 0.1, 0.1]}
         fontSize={0.1}
-        color="#ffffff"
+        color={"#ffffff"}
         anchorX="center"
         anchorY="middle"
         maxWidth={2}
@@ -76,7 +77,7 @@ const CertificateModel = ({
       <Text
         position={[0, -0.1, 0.1]}
         fontSize={0.08}
-        color="#ffffff"
+        color={"#ffffff"}
         anchorX="center"
         anchorY="middle"
         maxWidth={2}
@@ -86,7 +87,7 @@ const CertificateModel = ({
       <Text
         position={[0, -0.4, 0.1]}
         fontSize={0.07}
-        color="#ffffff"
+        color={"#ffffff"}
         anchorX="center"
         anchorY="middle"
         maxWidth={2.2}

@@ -1,12 +1,12 @@
 
 import { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF, Float } from '@react-three/drei';
-import * as THREE from 'three';
+import { Float } from '@react-three/drei';
+import { Group } from 'three';
 import gsap from 'gsap';
 
 export default function HeroModel({ isDarkMode }: { isDarkMode: boolean }) {
-  const mesh = useRef<THREE.Group>(null);
+  const mesh = useRef<Group>(null);
   
   // Create a floating sphere with particles around it
   useFrame((state) => {
@@ -66,7 +66,7 @@ export default function HeroModel({ isDarkMode }: { isDarkMode: boolean }) {
         <mesh rotation-x={Math.PI / 2}>
           <torusGeometry args={[2.2, 0.1, 16, 100]} />
           <meshStandardMaterial 
-            color={isDarkMode ? "#D946EF" : "#F97316"} 
+            color={isDarkMode ? "#D946EF" : "#F97316"}
             transparent
             opacity={0.6}
           />
